@@ -1,4 +1,6 @@
-import 'package:baccarat/app/modules/game_layout.dart';
+import 'package:baccarat/app/modules/pages/casa_jogador_tie.dart';
+import 'package:baccarat/app/modules/pages/bets_values.dart';
+import 'package:baccarat/app/modules/pages/textviews_saldo_aposta.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -38,7 +40,7 @@ class ButtonJogar extends StatelessWidget {
           onPressed: () {},
           style: ElevatedButton.styleFrom(
             minimumSize: const Size(150, 100),
-            backgroundColor: Colors.purple,
+            backgroundColor: const Color.fromARGB(255, 93, 26, 124),
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(10),
@@ -77,24 +79,24 @@ class TextBoxValorParaApostar extends StatelessWidget {
               fontWeight: FontWeight.normal,
             ),
           ),
-          const SizedBox(height: 8), 
+          const SizedBox(height: 8),
           SizedBox(
-            width: 300,  // Increased width
+            width: 300, // Increased width
             child: TextField(
               controller: controller,
               decoration: const InputDecoration(
                 labelText: '500',
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.purple),
+                  borderSide:
+                      BorderSide(color: Color.fromARGB(255, 117, 47, 163)),
                 ),
               ),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
             ),
           ),
         ],
       ),
     );
   }
-} 
-
-    
+}
