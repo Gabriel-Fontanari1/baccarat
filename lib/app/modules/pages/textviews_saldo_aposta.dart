@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class TextViewSuaAposta extends StatefulWidget {
-  //este textview vai ficar na esquerda inferior da tela, mostrando o quanto o usuario aposto
   const TextViewSuaAposta({super.key});
 
   @override
@@ -39,17 +38,11 @@ class _TextViewSuaApostaState extends State<TextViewSuaAposta> {
   }
 }
 
-//textview saldo vai ter o layout semelhante ao do textview sua aposta
-class TextViewSeuSaldo extends StatefulWidget {
-  const TextViewSeuSaldo({super.key});
+// TextView para exibir o saldo atualizado
+class TextViewSeuSaldo extends StatelessWidget {
+  final int saldo;
 
-  @override
-  // ignore: library_private_types_in_public_api
-  _TextViewSeuSaldoState createState() => _TextViewSeuSaldoState();
-}
-
-class _TextViewSeuSaldoState extends State<TextViewSeuSaldo> {
-  int saldo = 0;
+  const TextViewSeuSaldo({super.key, required this.saldo});
 
   @override
   Widget build(BuildContext context) {

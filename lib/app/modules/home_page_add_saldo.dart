@@ -1,6 +1,8 @@
-import 'package:baccarat/app/modules/pages/casa_jogador_tie.dart';
 import 'package:baccarat/app/modules/pages/bets_values.dart';
+import 'package:baccarat/app/modules/pages/casa_jogador_tie.dart';
+import 'package:baccarat/app/modules/pages/textview_rodadas_restantes.dart';
 import 'package:baccarat/app/modules/pages/textviews_saldo_aposta.dart';
+import 'package:baccarat/app/modules/pages/timer.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,17 +13,50 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final TextEditingController _controller = TextEditingController();
+  int _saldo = 0;
+  bool _showInputAndButton = true;
+  bool _showTimer = false;
+
+  void _adicionarSaldo() {
+    final saldoInserido = int.tryParse(_controller.text);
+    if (saldoInserido != null && saldoInserido > 0) {
+      setState(() {
+        _saldo += saldoInserido;
+        _showInputAndButton = false;
+        _showTimer = true;
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Por favor, insira um valor válido")),
+      );
+    }
+  }
+
   @override
-  Scaffold build(BuildContext context) {
-    return const Scaffold(
-      body: Column(
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
         children: [
-          TextBoxValorParaApostar(),
-          ButtonJogar(),
-          InserirApostaCasaJogadorTie(),
-          BottonsAdicionarAposta(),
-          TextViewSuaAposta(),
-          TextViewSeuSaldo(),
+          Column(
+            children: [
+              if (_showInputAndButton) ...[
+                TextBoxValorParaApostar(controller: _controller),
+                ButtonJogar(onPressed: _adicionarSaldo),
+              ],
+              if (_showTimer)
+                const TimerWidget(),
+              const InserirApostaCasaJogadorTie(),
+              const BottonsAdicionarAposta(),
+              const TextViewSuaAposta(),
+              TextViewSeuSaldo(saldo: _saldo),
+            ],
+          ),
+          const Positioned(
+            top: 20,
+            right: 20,
+            child: RodadasWidget(), 
+          ),
         ],
       ),
     );
@@ -29,7 +64,9 @@ class _HomePageState extends State<HomePage> {
 }
 
 class ButtonJogar extends StatelessWidget {
-  const ButtonJogar({super.key});
+  final VoidCallback onPressed;
+
+  const ButtonJogar({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +74,7 @@ class ButtonJogar extends StatelessWidget {
       padding: const EdgeInsets.only(top: 20, bottom: 20),
       child: Center(
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             minimumSize: const Size(150, 100),
             backgroundColor: const Color.fromARGB(255, 93, 26, 124),
@@ -50,7 +87,7 @@ class ButtonJogar extends StatelessWidget {
           child: const Text(
             'JOGAR',
             style: TextStyle(
-              color: Colors.white,
+              color: Color.fromARGB(255, 255, 255, 255),
               fontSize: 30,
             ),
           ),
@@ -61,12 +98,12 @@ class ButtonJogar extends StatelessWidget {
 }
 
 class TextBoxValorParaApostar extends StatelessWidget {
-  const TextBoxValorParaApostar({super.key});
+  final TextEditingController controller;
+
+  const TextBoxValorParaApostar({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController controller = TextEditingController();
-
     return Padding(
       padding: const EdgeInsets.only(top: 30),
       child: Column(
@@ -81,7 +118,7 @@ class TextBoxValorParaApostar extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           SizedBox(
-            width: 300, // Increased width
+            width: 300,
             child: TextField(
               controller: controller,
               decoration: const InputDecoration(

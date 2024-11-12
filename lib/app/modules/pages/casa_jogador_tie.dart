@@ -13,7 +13,7 @@ class _InserirApostaCasaJogadorTieState
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color.fromARGB(255, 245, 242, 242),
+      color: const Color.fromARGB(255, 255, 247, 247),
       padding: const EdgeInsets.all(16),
       width: MediaQuery.of(context).size.width * 0.4,
       height: 250,
