@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class BottonsAdicionarAposta extends StatefulWidget {
-  const BottonsAdicionarAposta({super.key});
+  final Function(int) onSelecionarValor;
+
+  const BottonsAdicionarAposta({super.key, required this.onSelecionarValor});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -10,6 +12,7 @@ class BottonsAdicionarAposta extends StatefulWidget {
 
 class _BottonsAdicionarApostaState extends State<BottonsAdicionarAposta> {
   final List<int> _valorAposta = [5, 10, 30, 125, 500, 1000];
+  int? _selectedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +23,23 @@ class _BottonsAdicionarApostaState extends State<BottonsAdicionarAposta> {
         runSpacing: 8,
         children: List.generate(_valorAposta.length, (index) {
           return ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                _selectedIndex = index;
+                widget.onSelecionarValor(_valorAposta[index]);
+              });
+            },
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white,
               backgroundColor: Colors.deepPurple,
               minimumSize: const Size(0, 60),
-              shape: const CircleBorder(
-                side: BorderSide(color: Colors.deepPurple, width: 2),
+              shape: CircleBorder(
+                side: BorderSide(
+                  color: _selectedIndex == index
+                      ? Colors.black
+                      : Colors.deepPurple,
+                  width: 2,
+                ),
               ),
             ),
             child: Text(

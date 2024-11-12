@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 class CartasAnimadas extends StatefulWidget {
@@ -11,43 +12,39 @@ class CartasAnimadas extends StatefulWidget {
 }
 
 class _CartasAnimadasState extends State<CartasAnimadas> {
-  List<int> cartas = List.generate(9, (index) => index + 1);
-  List<double> posicoesCartas = List.generate(9, (index) => -100.0);
+  List<int> cartas = [];
   bool cartasVisiveis = false;
 
-  // Ativa a animação das cartas
   void ativarCartas() {
     setState(() {
       cartasVisiveis = true;
-      for (int i = 0; i < cartas.length; i++) {
-        posicoesCartas[i] = 20.0 + (i * 60.0); // Movendo as cartas para dentro da tela
-      }
     });
   }
 
   @override
   void initState() {
     super.initState();
-    // Chamando a função onTimerFinish quando as cartas são ativadas
+    cartas = List.generate(2, (_) => Random().nextInt(9) + 1);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!cartasVisiveis) {
-        widget.onTimerFinish(); // Chama a função para avisar que o timer terminou
-      }
+      ativarCartas();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    return SizedBox(
+      width: double.infinity,
+      height: 300,
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          // Animação das cartas
           for (int i = 0; i < cartas.length; i++)
             AnimatedPositioned(
               duration: const Duration(seconds: 1),
-              top: cartasVisiveis ? posicoesCartas[i] : -100.0,
-              left: 20.0,
-              right: 20.0,
+              top: cartasVisiveis ? 75.0 : -100.0,
+              left: (screenWidth / 2) - 110 + (i * 120),
               child: Card(
                 color: Colors.purple,
                 child: SizedBox(
@@ -59,7 +56,6 @@ class _CartasAnimadasState extends State<CartasAnimadas> {
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 24,
-                        fontWeight: FontWeight.normal,
                       ),
                     ),
                   ),

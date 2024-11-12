@@ -19,6 +19,12 @@ class _HomePageState extends State<HomePage> {
   bool _showInputAndButton = true;
   bool _showTimer = false;
   bool _showCartas = false;
+  int? _valorApostaSelecionado;
+
+  int _playerAposta = 0;
+  int _bankerAposta = 0;
+  int _tieAposta = 0;
+  int _totalApostado = 0;
 
   void _adicionarSaldo() {
     final saldoInserido = int.tryParse(_controller.text);
@@ -35,11 +41,48 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // Função que será chamada quando o timer terminar
   void _ativarCartas() {
     setState(() {
-      _showTimer = false; // Esconde o timer
-      _showCartas = true; // Exibe as cartas
+      _showTimer = false;
+      _showCartas = true;
+    });
+  }
+
+  void _selecionarValorAposta(int valor) {
+    setState(() {
+      _valorApostaSelecionado = valor;
+    });
+  }
+
+  void _adicionarApostaNaCasa(String casa) {
+    if (_valorApostaSelecionado != null && _valorApostaSelecionado! <= _saldo) {
+      setState(() {
+        _saldo -= _valorApostaSelecionado!;
+        _totalApostado += _valorApostaSelecionado!;
+
+        if (casa == 'PLAYER') {
+          _playerAposta += _valorApostaSelecionado!;
+        } else if (casa == 'BANKER') {
+          _bankerAposta += _valorApostaSelecionado!;
+        } else if (casa == 'TIE') {
+          _tieAposta += _valorApostaSelecionado!;
+        }
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Saldo insuficiente para essa aposta")),
+      );
+    }
+  }
+
+  void _zerarApostas() {
+    setState(() {
+      _playerAposta = 0;
+      _bankerAposta = 0;
+      _tieAposta = 0;
+      _totalApostado = 0;
+      _showCartas = false;
+      _showTimer = true;
     });
   }
 
@@ -54,22 +97,25 @@ class _HomePageState extends State<HomePage> {
                 TextBoxValorParaApostar(controller: _controller),
                 ButtonJogar(onPressed: _adicionarSaldo),
               ],
-              if (_showTimer)
-                TimerWidget(onTimerFinish: _ativarCartas), // Passando a função corretamente
-              if (_showCartas)
-                CartasAnimadas(onTimerFinish: () {
-                  _ativarCartas(); // Chama a função quando o parâmetro é acionado
-                }), // Mostrar cartas quando necessário
-              const InserirApostaCasaJogadorTie(),
-              const BottonsAdicionarAposta(),
-              const TextViewSuaAposta(),
+              if (_showTimer) TimerWidget(onTimerFinish: _ativarCartas),
+              if (_showCartas) CartasAnimadas(onTimerFinish: () {}),
+              InserirApostaCasaJogadorTie(
+                playerAposta: _playerAposta,
+                bankerAposta: _bankerAposta,
+                tieAposta: _tieAposta,
+                onSelecionarCasa: _adicionarApostaNaCasa,
+              ),
+              BottonsAdicionarAposta(
+                onSelecionarValor: _selecionarValorAposta,
+              ),
+              TextViewSuaAposta(totalApostado: _totalApostado),
               TextViewSeuSaldo(saldo: _saldo),
             ],
           ),
-          const Positioned(
+          Positioned(
             top: 20,
             right: 20,
-            child: RodadasWidget(),
+            child: RodadasWidget(onNewRound: _zerarApostas),
           ),
         ],
       ),
@@ -93,9 +139,7 @@ class ButtonJogar extends StatelessWidget {
             minimumSize: const Size(150, 100),
             backgroundColor: const Color.fromARGB(255, 93, 26, 124),
             shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
           ),
           child: const Text(

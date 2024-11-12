@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 
-class TextViewSuaAposta extends StatefulWidget {
-  const TextViewSuaAposta({super.key});
+class TextViewSuaAposta extends StatelessWidget {
+  final int totalApostado;
 
-  @override
-  // ignore: library_private_types_in_public_api
-  _TextViewSuaApostaState createState() => _TextViewSuaApostaState();
-}
-
-class _TextViewSuaApostaState extends State<TextViewSuaAposta> {
-  int totalApostado = 0;
+  const TextViewSuaAposta({super.key, required this.totalApostado});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +32,6 @@ class _TextViewSuaApostaState extends State<TextViewSuaAposta> {
   }
 }
 
-// TextView para exibir o saldo atualizado
 class TextViewSeuSaldo extends StatelessWidget {
   final int saldo;
 
