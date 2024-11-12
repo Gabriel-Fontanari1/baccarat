@@ -46,7 +46,7 @@ class _CartasAnimadasState extends State<CartasAnimadas> {
               top: cartasVisiveis ? 75.0 : -100.0,
               left: (screenWidth / 2) - 110 + (i * 120),
               child: Card(
-                color: Colors.purple,
+                color: const Color.fromARGB(255, 132, 31, 150),
                 child: SizedBox(
                   width: 100,
                   height: 150,

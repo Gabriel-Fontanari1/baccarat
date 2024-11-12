@@ -19,6 +19,7 @@ class _HomePageState extends State<HomePage> {
   bool _showInputAndButton = true;
   bool _showTimer = false;
   bool _showCartas = false;
+  bool timerAtivo = true;
   int? _valorApostaSelecionado;
 
   int _playerAposta = 0;
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
         _saldo += saldoInserido;
         _showInputAndButton = false;
         _showTimer = true;
+        timerAtivo = true;
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -45,6 +47,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _showTimer = false;
       _showCartas = true;
+      timerAtivo = false;
     });
   }
 
@@ -55,6 +58,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _adicionarApostaNaCasa(String casa) {
+    if (!timerAtivo) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("O tempo de aposta acabou")),
+      );
+      return;
+    }
+
     if (_valorApostaSelecionado != null && _valorApostaSelecionado! <= _saldo) {
       setState(() {
         _saldo -= _valorApostaSelecionado!;
@@ -83,6 +93,7 @@ class _HomePageState extends State<HomePage> {
       _totalApostado = 0;
       _showCartas = false;
       _showTimer = true;
+      timerAtivo = true;
     });
   }
 
