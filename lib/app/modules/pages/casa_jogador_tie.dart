@@ -24,23 +24,23 @@ class _InserirApostaCasaJogadorTieState
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
-                child: _buildButton('PLAYER', '1:1'),
+                child: _buildButton('PLAYER 1:1'),
               ),
               const SizedBox(width: 5),
               Expanded(
-                child: _buildButton('BANKER', '0.95:1'),
+                child: _buildButton('BANKER 0.95:1'),
               ),
             ],
           ),
           Positioned(
-            child: _buildCenterButton('TIE', '8:1', width: 120),
+            child: _buildCenterButton('TIE 8:1', width: 120),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildButton(String text, String odds) {
+  Widget _buildButton(String text) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 32),
       decoration: BoxDecoration(
@@ -51,10 +51,6 @@ class _InserirApostaCasaJogadorTieState
         children: [
           Text(
             text,
-            style: const TextStyle(color: Colors.white, fontSize: 16),
-          ),
-          Text(
-            odds,
             style: const TextStyle(color: Colors.white, fontSize: 14),
           ),
         ],
@@ -62,29 +58,23 @@ class _InserirApostaCasaJogadorTieState
     );
   }
 
-  Widget _buildCenterButton(String text, String odds, {double width = 80}) {
+  Widget _buildCenterButton(String text, {double width = 80}) {
     return Container(
       width: 150,
       height: 150,
-      alignment: Alignment.center,
+      alignment: Alignment.topCenter,
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 103, 71, 158),
         border: Border.all(
             color: const Color.fromARGB(255, 243, 240, 240), width: 2),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            text,
-            style: const TextStyle(color: Colors.white, fontSize: 16),
-          ),
-          Text(
-            odds,
-            style: const TextStyle(color: Colors.white, fontSize: 14),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: Text(
+          text,
+          style: const TextStyle(color: Colors.white, fontSize: 14),
+        ),
       ),
     );
   }

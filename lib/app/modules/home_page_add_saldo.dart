@@ -1,9 +1,10 @@
-import 'package:baccarat/app/modules/pages/bets_values.dart';
-import 'package:baccarat/app/modules/pages/casa_jogador_tie.dart';
-import 'package:baccarat/app/modules/pages/textview_rodadas_restantes.dart';
-import 'package:baccarat/app/modules/pages/textviews_saldo_aposta.dart';
-import 'package:baccarat/app/modules/pages/timer.dart';
+import 'package:baccarat/app/modules/pages/cartas.dart';
 import 'package:flutter/material.dart';
+import 'package:baccarat/app/modules/pages/timer.dart';
+import 'package:baccarat/app/modules/pages/casa_jogador_tie.dart';
+import 'package:baccarat/app/modules/pages/textviews_saldo_aposta.dart';
+import 'package:baccarat/app/modules/pages/bets_values.dart';
+import 'package:baccarat/app/modules/pages/textview_rodadas_restantes.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   int _saldo = 0;
   bool _showInputAndButton = true;
   bool _showTimer = false;
+  bool _showCartas = false;
 
   void _adicionarSaldo() {
     final saldoInserido = int.tryParse(_controller.text);
@@ -33,6 +35,14 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // Função que será chamada quando o timer terminar
+  void _ativarCartas() {
+    setState(() {
+      _showTimer = false; // Esconde o timer
+      _showCartas = true; // Exibe as cartas
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +55,11 @@ class _HomePageState extends State<HomePage> {
                 ButtonJogar(onPressed: _adicionarSaldo),
               ],
               if (_showTimer)
-                const TimerWidget(),
+                TimerWidget(onTimerFinish: _ativarCartas), // Passando a função corretamente
+              if (_showCartas)
+                CartasAnimadas(onTimerFinish: () {
+                  _ativarCartas(); // Chama a função quando o parâmetro é acionado
+                }), // Mostrar cartas quando necessário
               const InserirApostaCasaJogadorTie(),
               const BottonsAdicionarAposta(),
               const TextViewSuaAposta(),
@@ -55,7 +69,7 @@ class _HomePageState extends State<HomePage> {
           const Positioned(
             top: 20,
             right: 20,
-            child: RodadasWidget(), 
+            child: RodadasWidget(),
           ),
         ],
       ),
