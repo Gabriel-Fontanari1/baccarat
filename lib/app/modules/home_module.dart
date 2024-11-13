@@ -1,12 +1,12 @@
-import 'package:baccarat/app/modules/home_page.dart';
+import 'package:baccarat/app/modules/home_page_add_saldo.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-class HomeModule extends Module{
+class HomeModule extends Module {
   @override
-  void binds(i){}
+  void binds(i) {}
 
   @override
-  void routes(r){
+  void routes(r) {
     r.child('/', child: (context) => const HomePage());
   }
 }
