@@ -28,6 +28,7 @@ class _CartasAnimadasState extends State<CartasAnimadas> {
     widget.onResultado(cartas[0], cartas[1]);
   }
 
+  //cartas com valores aleatórios
   @override
   void initState() {
     super.initState();
@@ -40,7 +41,7 @@ class _CartasAnimadasState extends State<CartasAnimadas> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-
+    //as cartas inicializam fora da tela
     return SizedBox(
       width: double.infinity,
       height: 300,

@@ -17,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
+  //definição de variaveis
   int _saldo = 0;
   bool _showInputAndButton = true;
   bool _showTimer = false;
@@ -29,12 +30,14 @@ class _HomePageState extends State<HomePage> {
   int _tieAposta = 0;
   int _totalApostado = 0;
 
+  //add saldo e ativa o timer
   void _adicionarSaldo() {
     final saldoInserido = int.tryParse(_controller.text);
     if (saldoInserido != null && saldoInserido > 0) {
       setState(() {
         _saldo += saldoInserido;
-        _showInputAndButton = false;
+        _showInputAndButton =
+            false; //oculta o botão e o inputtext para add saldo
         _showTimer = true;
         timerAtivo = true;
       });
@@ -45,6 +48,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  //puxa as cartas e desativa o timer
   void _ativarCartas() {
     setState(() {
       _showTimer = false;
@@ -53,12 +57,14 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  //selecionar o valor da aposta
   void _selecionarValorAposta(int valor) {
     setState(() {
       _valorApostaSelecionado = valor;
     });
   }
 
+  //add aposta nas casas, durante durante o timer
   void _adicionarApostaNaCasa(String casa) {
     if (!timerAtivo) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -80,6 +86,7 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
+    //atualiza as apostas com o valor selecionado
     setState(() {
       _saldo -= _valorApostaSelecionado!;
       _totalApostado += _valorApostaSelecionado!;
@@ -94,6 +101,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  //puxar o proximo round
   void _zerarApostas() {
     setState(() {
       _playerAposta = 0;
@@ -110,6 +118,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  //calcula o resultado conforme as cartas
   void _calcularGanho(int cartaEsquerda, int cartaDireita) async {
     const double multiplicadorPlayer = 2.0;
     const double multiplicadorBanker = 1.95;
@@ -123,6 +132,7 @@ class _HomePageState extends State<HomePage> {
     double valorGanhos = 0;
     bool ganhou = false;
 
+    //verifica o vencedor
     if (cartaEsquerda > cartaDireita && _playerAposta > 0) {
       valorGanhos = (_playerAposta * multiplicadorPlayer);
       ganhou = true;
@@ -142,6 +152,7 @@ class _HomePageState extends State<HomePage> {
       casaGanhadora = cartaEsquerda > cartaDireita ? 'PLAYER' : 'BANKER';
     }
 
+    //dialog resultado
     await DialogResultado.mostrarResultado(
       context: context,
       casaGanhadora: casaGanhadora,
@@ -149,6 +160,7 @@ class _HomePageState extends State<HomePage> {
       ganhou: ganhou,
     );
 
+    //evita do jogo continuar após os rounds acabarem
     if (_roundsRestantes != 0) {
       setState(() {
         _zerarApostas();
@@ -203,6 +215,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+//layout do botão jogar
 class ButtonJogar extends StatelessWidget {
   final VoidCallback onPressed;
 
@@ -235,6 +248,7 @@ class ButtonJogar extends StatelessWidget {
   }
 }
 
+//layout do inputtext
 class TextBoxValorParaApostar extends StatelessWidget {
   final TextEditingController controller;
 

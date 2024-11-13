@@ -14,6 +14,7 @@ class InserirApostaCasaJogadorTie extends StatelessWidget {
     required this.onSelecionarCasa,
   });
 
+  //botões sobrepostos para as 3 casas
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -63,8 +64,8 @@ class InserirApostaCasaJogadorTie extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(top: 8),
                 padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 156, 63, 233),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 156, 63, 233),
                   shape: BoxShape.circle,
                 ),
                 child: Text(
@@ -104,8 +105,8 @@ class InserirApostaCasaJogadorTie extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(top: 8),
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 156, 63, 233),
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 156, 63, 233),
                     shape: BoxShape.circle,
                   ),
                   child: Text(

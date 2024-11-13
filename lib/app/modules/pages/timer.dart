@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 class TimerWidget extends StatefulWidget {
-  final VoidCallback onTimerFinish;
+  final VoidCallback onTimerFinish; //função chamada no final do timer
   const TimerWidget({super.key, required this.onTimerFinish});
 
   @override
@@ -10,8 +10,8 @@ class TimerWidget extends StatefulWidget {
 }
 
 class _TimerWidgetState extends State<TimerWidget> {
-  int _timeLeft = 5;
-  double _progress = 1.0;
+  int _timeLeft = 5; //tempo do timer
+  double _progress = 1.0; //progresso visual do temporizador
   late Timer _timer;
   bool _timerVisivel = true;
 
@@ -21,14 +21,15 @@ class _TimerWidgetState extends State<TimerWidget> {
     _startTimer();
   }
 
+  //timer vai decrementar a cada segundo
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_timeLeft > 0) {
           _timeLeft--;
-          _progress = _timeLeft / 5;
+          _progress = _timeLeft / 5; //atualiza o progresso visual
         } else {
-          _timer.cancel();
+          _timer.cancel(); //cancelar o timer
           _timerVisivel = false;
           widget.onTimerFinish();
         }
@@ -36,6 +37,7 @@ class _TimerWidgetState extends State<TimerWidget> {
     });
   }
 
+  //cancela o timer para evitar vazamento de memoria
   @override
   void dispose() {
     _timer.cancel();
@@ -80,6 +82,6 @@ class _TimerWidgetState extends State<TimerWidget> {
               ),
             ],
           )
-        : Container();
+        : Container(); //se o timer estiver invisivel, ele vai só retornar um container vazio
   }
 }

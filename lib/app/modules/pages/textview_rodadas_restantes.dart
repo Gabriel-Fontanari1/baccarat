@@ -10,6 +10,7 @@ class RodadasWidget extends StatelessWidget {
     required this.roundsRestantes,
   });
 
+  //textview rodadas restantes
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

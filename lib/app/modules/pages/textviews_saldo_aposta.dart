@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class TextViewSuaAposta extends StatelessWidget {
   final int totalApostado;
 
+  //textview aposta
   const TextViewSuaAposta({super.key, required this.totalApostado});
 
   @override
@@ -32,6 +33,7 @@ class TextViewSuaAposta extends StatelessWidget {
   }
 }
 
+//textview saldo
 class TextViewSeuSaldo extends StatelessWidget {
   final int saldo;
 

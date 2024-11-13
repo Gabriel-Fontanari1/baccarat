@@ -10,6 +10,7 @@ class BottonsAdicionarAposta extends StatefulWidget {
   _BottonsAdicionarApostaState createState() => _BottonsAdicionarApostaState();
 }
 
+//botões dos valores de apostas
 class _BottonsAdicionarApostaState extends State<BottonsAdicionarAposta> {
   final List<int> _valorAposta = [5, 10, 30, 125, 500, 1000];
   int? _selectedIndex;
