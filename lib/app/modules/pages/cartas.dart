@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 
 class CartasAnimadas extends StatefulWidget {
   final VoidCallback onTimerFinish;
+  final Function(int, int) onResultado;
 
-  const CartasAnimadas({super.key, required this.onTimerFinish});
+  const CartasAnimadas({
+    super.key,
+    required this.onTimerFinish,
+    required this.onResultado,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -19,6 +24,8 @@ class _CartasAnimadasState extends State<CartasAnimadas> {
     setState(() {
       cartasVisiveis = true;
     });
+
+    widget.onResultado(cartas[0], cartas[1]);
   }
 
   @override

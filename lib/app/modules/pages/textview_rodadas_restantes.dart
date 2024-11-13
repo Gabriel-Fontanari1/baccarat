@@ -1,31 +1,19 @@
 import 'package:flutter/material.dart';
 
-class RodadasWidget extends StatefulWidget {
+class RodadasWidget extends StatelessWidget {
   final VoidCallback onNewRound;
+  final int roundsRestantes;
 
-  const RodadasWidget({super.key, required this.onNewRound});
-
-  @override
-  State<RodadasWidget> createState() => _RodadasWidgetState();
-}
-
-class _RodadasWidgetState extends State<RodadasWidget> {
-  final int _totalRodadas = 10;
-  int _rodadaAtual = 0;
-
-  void iniciarNovoRound() {
-    if (_rodadaAtual < _totalRodadas) {
-      setState(() {
-        _rodadaAtual++;
-      });
-      widget.onNewRound();
-    }
-  }
+  const RodadasWidget({
+    super.key,
+    required this.onNewRound,
+    required this.roundsRestantes,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: iniciarNovoRound,
+      onTap: onNewRound, // Inicia a nova rodada ao clicar
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
@@ -33,7 +21,7 @@ class _RodadasWidgetState extends State<RodadasWidget> {
           borderRadius: BorderRadius.circular(20),
         ),
         child: Text(
-          'Rodadas restantes: ${_totalRodadas - _rodadaAtual}',
+          'Rodadas restantes: $roundsRestantes',
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.normal,

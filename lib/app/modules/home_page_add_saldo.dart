@@ -1,4 +1,6 @@
 import 'package:baccarat/app/modules/pages/cartas.dart';
+import 'package:baccarat/app/modules/pages/dialog_resultado.dart';
+import 'package:baccarat/app/modules/pages/dialog_saldoinsuficiente.dart';
 import 'package:flutter/material.dart';
 import 'package:baccarat/app/modules/pages/timer.dart';
 import 'package:baccarat/app/modules/pages/casa_jogador_tie.dart';
@@ -21,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   bool _showCartas = false;
   bool timerAtivo = true;
   int? _valorApostaSelecionado;
-
+  int _roundsRestantes = 10;
   int _playerAposta = 0;
   int _bankerAposta = 0;
   int _tieAposta = 0;
@@ -65,24 +67,31 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    if (_valorApostaSelecionado != null && _valorApostaSelecionado! <= _saldo) {
-      setState(() {
-        _saldo -= _valorApostaSelecionado!;
-        _totalApostado += _valorApostaSelecionado!;
-
-        if (casa == 'PLAYER') {
-          _playerAposta += _valorApostaSelecionado!;
-        } else if (casa == 'BANKER') {
-          _bankerAposta += _valorApostaSelecionado!;
-        } else if (casa == 'TIE') {
-          _tieAposta += _valorApostaSelecionado!;
-        }
-      });
-    } else {
+    if (_valorApostaSelecionado == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Saldo insuficiente para essa aposta")),
+        const SnackBar(
+            content: Text("Por favor, selecione um valor para a aposta")),
       );
+      return;
     }
+
+    if (_valorApostaSelecionado! > _saldo) {
+      DialogSaldoInsuficiente.mostrarDialogSaldoInsuficiente(context);
+      return;
+    }
+
+    setState(() {
+      _saldo -= _valorApostaSelecionado!;
+      _totalApostado += _valorApostaSelecionado!;
+
+      if (casa == 'PLAYER') {
+        _playerAposta += _valorApostaSelecionado!;
+      } else if (casa == 'BANKER') {
+        _bankerAposta += _valorApostaSelecionado!;
+      } else if (casa == 'TIE') {
+        _tieAposta += _valorApostaSelecionado!;
+      }
+    });
   }
 
   void _zerarApostas() {
@@ -94,7 +103,60 @@ class _HomePageState extends State<HomePage> {
       _showCartas = false;
       _showTimer = true;
       timerAtivo = true;
+
+      if (_roundsRestantes > 0) {
+        _roundsRestantes--;
+      }
     });
+  }
+
+  void _calcularGanho(int cartaEsquerda, int cartaDireita) async {
+    const double multiplicadorPlayer = 2.0;
+    const double multiplicadorBanker = 1.95;
+    const double multiplicadorTie = 8.0;
+
+    setState(() {
+      timerAtivo = false;
+    });
+
+    String casaGanhadora;
+    double valorGanhos = 0;
+    bool ganhou = false;
+
+    if (cartaEsquerda > cartaDireita && _playerAposta > 0) {
+      valorGanhos = (_playerAposta * multiplicadorPlayer);
+      ganhou = true;
+      casaGanhadora = 'PLAYER';
+      _saldo += valorGanhos.toInt();
+    } else if (cartaDireita > cartaEsquerda && _bankerAposta > 0) {
+      valorGanhos = (_bankerAposta * multiplicadorBanker);
+      ganhou = true;
+      casaGanhadora = 'BANKER';
+      _saldo += valorGanhos.toInt();
+    } else if (cartaEsquerda == cartaDireita && _tieAposta > 0) {
+      valorGanhos = (_tieAposta * multiplicadorTie);
+      ganhou = true;
+      casaGanhadora = 'TIE';
+      _saldo += valorGanhos.toInt();
+    } else {
+      casaGanhadora = cartaEsquerda > cartaDireita ? 'PLAYER' : 'BANKER';
+    }
+
+    await DialogResultado.mostrarResultado(
+      context: context,
+      casaGanhadora: casaGanhadora,
+      valorGanhos: valorGanhos,
+      ganhou: ganhou,
+    );
+
+    if (_roundsRestantes != 0) {
+      setState(() {
+        _zerarApostas();
+        timerAtivo = true;
+        _showTimer = true;
+        _showCartas = false;
+      });
+    }
   }
 
   @override
@@ -109,7 +171,11 @@ class _HomePageState extends State<HomePage> {
                 ButtonJogar(onPressed: _adicionarSaldo),
               ],
               if (_showTimer) TimerWidget(onTimerFinish: _ativarCartas),
-              if (_showCartas) CartasAnimadas(onTimerFinish: () {}),
+              if (_showCartas)
+                CartasAnimadas(
+                  onTimerFinish: () {},
+                  onResultado: _calcularGanho,
+                ),
               InserirApostaCasaJogadorTie(
                 playerAposta: _playerAposta,
                 bankerAposta: _bankerAposta,
@@ -126,7 +192,10 @@ class _HomePageState extends State<HomePage> {
           Positioned(
             top: 20,
             right: 20,
-            child: RodadasWidget(onNewRound: _zerarApostas),
+            child: RodadasWidget(
+              roundsRestantes: _roundsRestantes,
+              onNewRound: _zerarApostas,
+            ),
           ),
         ],
       ),

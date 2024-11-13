@@ -60,9 +60,17 @@ class InserirApostaCasaJogadorTie extends StatelessWidget {
               style: const TextStyle(color: Colors.white, fontSize: 14),
             ),
             if (aposta > 0)
-              Text(
-                '$aposta',
-                style: const TextStyle(color: Colors.white, fontSize: 20),
+              Container(
+                margin: const EdgeInsets.only(top: 8),
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 156, 63, 233),
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  '$aposta',
+                  style: const TextStyle(color: Colors.white, fontSize: 18),
+                ),
               ),
           ],
         ),
@@ -93,9 +101,17 @@ class InserirApostaCasaJogadorTie extends StatelessWidget {
                 style: const TextStyle(color: Colors.white, fontSize: 14),
               ),
               if (aposta > 0)
-                Text(
-                  '$aposta',
-                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                Container(
+                  margin: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 156, 63, 233),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Text(
+                    '$aposta',
+                    style: const TextStyle(color: Colors.white, fontSize: 18),
+                  ),
                 ),
             ],
           ),
